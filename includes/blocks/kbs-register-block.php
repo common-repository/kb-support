@@ -1,0 +1,34 @@
+<?php
+// Ensure ABSPATH is defined for security
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
+// Function to render the block
+function kbs_register_block_render( $attributes ) {
+    $redirect = isset( $attributes['redirect'] ) ? $attributes['redirect'] : '';
+
+    // Check if the shortcode function exists
+    if ( function_exists( 'kbs_register_form_shortcode' ) ) {
+        return kbs_register_form_shortcode( array( 'redirect' => $redirect ) );
+    }
+
+    return '';
+}
+
+// Register the block
+function kbs_register_register_block() {
+    // Check if function exists
+    if ( function_exists( 'register_block_type' ) ) {
+        register_block_type( 'kbs/register-block', array(
+            'render_callback' => 'kbs_register_block_render',
+            'attributes' => array(
+                'redirect' => array(
+                    'type' => 'string',
+                    'default' => '',
+                ),
+            ),
+        ) );
+    }
+}
+add_action( 'init', 'kbs_register_register_block' );
